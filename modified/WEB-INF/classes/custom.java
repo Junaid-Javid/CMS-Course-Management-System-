@@ -1,0 +1,107 @@
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.sql.*;
+import java.util.ArrayList;
+
+
+public class custom extends HttpServlet {
+
+  //Process the HTTP Post request
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  
+    response.setContentType("text/html");
+    // get PrintWriter object
+    PrintWriter out = response.getWriter();
+  //get data from customform
+    String courses=request.getParameter("courses"); 
+
+    out.println("<html>");
+    out.println("<head><title>CUSTOM SEARCH</title><link rel='stylesheet' href='css/bootstrap.min.css'/></head>");
+    out.println("<body style='background-color:#e3f2fd;'>");
+    
+    HttpSession session=request.getSession(false);  
+    
+    if(session == null)
+    {
+      out.println("<h1 class='text-center mt-3'>YOU ARE NOT SIGNED IN OR YOUR SESSION HAS BEEN EXPIRED</h1>");
+      out.println("<BR/><br/><a href='signin.html'><button class='btn btn-primary ms-3'>SIGN IN</button></a>");    
+    }else
+  {
+    RequestDispatcher rd = request.getRequestDispatcher("/header.html");
+    rd.include(request,response);
+  
+  try
+  {
+      Class.forName("com.mysql.jdbc.Driver");
+      String url = "jdbc:mysql://127.0.0.1/project";
+      Connection con=DriverManager.getConnection(url,"root","root");
+      Statement st=con.createStatement();
+	    
+      String name=(String)session.getAttribute("session_name");  
+	    String id=(String)session.getAttribute("session_id");  	
+      
+      String query = "SELECT * FROM add_course WHERE (signup_id = '"+ id + "' AND name = '"+ name +"' AND courses = '"+ courses + "') ";
+     	ResultSet rs = st.executeQuery( query );
+
+    if(rs.next())
+    {	
+      out.println("<div class='container'>");
+      out.println("<h1 class='mt-3 text-center'>Searched Course</h1>");
+      out.println("<table class='table table-bordered border-dark'>"); 
+      out.println("<thead>");
+      out.println("<tr class='table-dark'>");
+      out.println("<th>Course Name</th>");
+      out.println("<th>Teacher Name</th>");
+      out.println("<th>Day</th>");
+      out.println("<th>Time Slot</th>");
+      out.println("</tr>");
+      out.println("</thead>");
+          
+     ArrayList<String> degree = new ArrayList<String>();
+      do{
+        
+        degree.add(rs.getString("courses"));
+        degree.add(rs.getString("teachers"));
+        degree.add(rs.getString("day"));
+        degree.add(rs.getString("time"));
+      }while (rs.next());
+
+      out.println("<tbody>");
+      out.println("<tr>");
+
+      int a = 0;
+      for(int i=0;i<degree.size();i++)
+      {
+          
+        out.println("<td>");     
+        out.println(degree.get(i));  
+        out.println("</td>");  
+        if(a>2)
+        {   
+          out.println("</tr><tr>");   
+          a = 0;
+        }else
+        {
+            a++;
+        }  
+      }
+      out.println("</tr>");
+      out.println("</tbody></table>");
+    }
+    else
+    {
+      out.println("<h1 class='mt-3 text-center'>You Are NOT Enrolled In That Course</h1>");
+      out.println("<h1 class='mt-3 text-center'>First Add Courses</h1>");
+    }
+    st.close();
+    con.close();
+  }
+  catch(Exception e)
+  {
+    out.println(e);
+  }
+}//else end
+out.println("</body></html>");
+}
+}

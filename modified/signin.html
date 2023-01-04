@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+    <title>Sign In</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet" >
+        <script type="text/javascript" src="script/script.js" ></script>
+    </head> 
+ 
+    <body style="background-color: #e3f2fd;">  
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <form name="signin_form" method="post" action="signin"  class="mt-5 border p-4 bg-light shadow" onsubmit="return validation_signin()" >
+                            <h4 class="mb-5 text-secondary">Sign In  To Account</h4>
+                        <div class="row">
+                                
+                            <div class="mb-3 col-md-12">
+                                    <label>User Name<span class="text-danger">*</span></label>
+                                    <input type="text" name="name" class="form-control" placeholder="Enter User Name">
+                            </div>
+                                
+                            <div class="mb-3 col-md-12">
+                                    <label>Password<span class="text-danger">*</span></label>
+                                    <input type="password" name="password" class="form-control" placeholder="Enter Password">
+                            </div>
+                               
+                              
+                            <div class="col-md-12">
+                                <button class="btn btn-primary float-end" type="submit" value="signin">Account Signin</button>
+                                <a href="forgot.html">Forgot Password/Username</a>
+                            </div>
+                             
+                            <div class="col-md-12 mt-3">
+                                 <a href="role.html">
+                                 Create Account
+                                 </a>
+                            </div>
+                            
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="js/bootstrap.bundle.min.js"></script>
+</html>
